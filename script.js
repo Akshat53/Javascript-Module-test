@@ -1,218 +1,196 @@
-const computerScore = document.querySelector(".scoreComp");
-const playerScore = document.querySelector(".scorePlayer");
-const keys = document.querySelectorAll(".item");
-const playingZone = document.querySelector(".playing-zone");
-const resultZone = document.querySelector(".result-zone");
-const winText = document.querySelector("#win-text");
-const lostText = document.querySelector("#lost-text");
-const tieText = document.querySelector("#tie-text");
-const subText = document.querySelector(".sub-text");
-const playAgainBtn = document.querySelector(".playBtn");
-const replayBtn = document.querySelector(".replayBtn");
-const userRock = document.querySelector("#user-rock");
-const pcRock = document.querySelector("#pc-rock");
-const userPaper = document.querySelector("#user-paper");
-const pcPaper = document.querySelector("#pc-paper");
-const userScissor = document.querySelector("#user-scissor");
-const pcScissor = document.querySelector("#pc-scissor");
-const userIcon = document.querySelector(".user-side-icon");
-const pcIcon = document.querySelector(".pc-side-icon");
-const nextBtn = document.querySelector(".nextBtn");
-const rulesBtn = document.querySelector(".rulesBtn");
-const mainScreen = document.querySelector(".main-screen");
-const winnerScreen = document.querySelector(".winner-screen");
-const winnerPlayAgainBtn = document.querySelector(".winnerPlayBtn");
-const rulesDisplay = document.querySelector(".rules");
-const crossBtn = document.querySelector(".cross");
-const keysArray = Array.from(keys);
+setTimeout(() => {
+  document.body.classList.remove("preload");
+}, 500);
+let userScore = 0;
+let computerScore = 0;
 
-function updateScoreDisplay() {
-  const scoresJSON = localStorage.getItem("scores");
-  const updatedScores = scoresJSON
-    ? JSON.parse(scoresJSON)
-    : { user: 0, computer: 0 };
-  computerScore.innerText = updatedScores.computer;
-  playerScore.innerText = updatedScores.user;
+// DOM
+const btnRules = document.querySelector(".rules-btn");
+const btnClose = document.querySelector(".close-btn");
+const modalRules = document.querySelector(".modal");
+
+const CHOICES = [
+  {
+    name: "paper",
+    beats: "rock",
+  },
+  {
+    name: "scissors",
+    beats: "paper",
+  },
+  {
+    name: "rock",
+    beats: "scissors",
+  },
+];
+const choiceButtons = document.querySelectorAll(".choice-btn");
+const gameDiv = document.querySelector(".game");
+const resultsDiv = document.querySelector(".results");
+const resultDivs = document.querySelectorAll(".results__result");
+
+const resultWinner = document.querySelector(".results__winner");
+const resultText = document.querySelector(".results__text");
+
+const playAgainBtn = document.querySelector(".play-again");
+
+const scoreNumber = document.querySelector(".score__number");
+let score = 0;
+
+choiceButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const choiceName = button.dataset.choice;
+    const choice = CHOICES.find((choice) => choice.name === choiceName);
+    choose(choice);
+  });
+});
+
+function choose(choice) {
+  const aichoice = aiChoose();
+  displayResults([choice, aichoice]);
+  displayWinner([choice, aichoice]);
 }
-updateScoreDisplay();
 
+function aiChoose() {
+  const rand = Math.floor(Math.random() * CHOICES.length);
+  return CHOICES[rand];
+}
 
+function displayResults(results) {
+  resultDivs.forEach((resultDiv, idx) => {
+    setTimeout(() => {
+      resultDiv.innerHTML = `
+        <div class="choice ${results[idx].name}">
+          <img src="images/icon-${results[idx].name}.svg" alt="${results[idx].name}" />
+        </div>
+      `;
+    }, idx * 100);
+  });
 
-const valueOfKey = (name) => {
-
-  let keyVal = 0;
-  if (name === "rock") {
-    keyVal = 1;
-  } else if (name === "paper") {
-    keyVal = 2;
-  } else if (name === "scissor") {
-    keyVal = 3;
-  }
-  return keyVal;
-};
-
-const getRandomNumber = () => {
-  const randomDecimal = Math.random();
-
-  const randomNumber = Math.floor(randomDecimal * 3) + 1;
-
-  return randomNumber;
-};
-
-const playRockPaperScissors = (userChoice, compChoice) => {
-  if (userChoice === compChoice) {
-    return "tie";
-  } else if (
-    (userChoice === 1 && compChoice === 3) ||
-    (userChoice === 2 && compChoice === 1) ||
-    (userChoice === 3 && compChoice === 2)
-  ) {
-    return "user";
+  gameDiv.classList.toggle("hidden");
+  resultsDiv.classList.toggle("hidden");
+}
+function toggleNextButton() {
+  const nextBtn = document.querySelector(".next-btn");
+  if (userScore > 0) {
+    nextBtn.style.display = "block";
   } else {
-    return "comp";
-  }
-};
-
-const updateScores = (result) => {
-  const scoresJSON = localStorage.getItem("scores");
-  const scores = scoresJSON ? JSON.parse(scoresJSON) : { user: 0, computer: 0 };
-
-  if (result === "user") {
-    scores.user += 1;
-  } else if (result === "comp") {
-    scores.computer += 1;
-  }
-
-  localStorage.setItem("scores", JSON.stringify(scores));
-
-  updateScoreDisplay();
-};
-
-const updateResultSides = (userChoice, compChoice) => {
-  if (userChoice === 1) {
-    userRock.style.display = "flex";
-    userPaper.style.display = "none";
-    userScissor.style.display = "none";
-  } else if (userChoice === 2) {
-    userRock.style.display = "none";
-    userPaper.style.display = "flex";
-    userScissor.style.display = "none";
-  } else if (userChoice === 3) {
-    userRock.style.display = "none";
-    userPaper.style.display = "none";
-    userScissor.style.display = "flex";
-  }
-
-  if (compChoice === 1) {
-    pcRock.style.display = "flex";
-    pcPaper.style.display = "none";
-    pcScissor.style.display = "none";
-  } else if (compChoice === 2) {
-    pcRock.style.display = "none";
-    pcPaper.style.display = "flex";
-    pcScissor.style.display = "none";
-  } else if (compChoice === 3) {
-    pcRock.style.display = "none";
-    pcPaper.style.display = "none";
-    pcScissor.style.display = "flex";
-  }
-};
-
-const updateResultZone = (result, userChoice, compChoice) => {
-  playingZone.style.display = "none";
-  resultZone.style.display = "flex";
-
-  if (result === "tie") {
-    winText.style.display = "none";
-    lostText.style.display = "none";
-    subText.style.display = "none";
-    playAgainBtn.style.display = "none";
     nextBtn.style.display = "none";
-
-    tieText.style.display = "block";
-    replayBtn.style.display = "block";
-
-    updateResultSides(userChoice, compChoice);
-    userIcon.classList.remove("green-background");
-    pcIcon.classList.remove("green-background");
-  } else if (result === "user") {
-    lostText.style.display = "none";
-    tieText.style.display = "none";
-    replayBtn.style.display = "none";
-
-    winText.style.display = "block";
-    subText.style.display = "block";
-    playAgainBtn.style.display = "block";
-    nextBtn.style.display = "inline";
-
-    updateResultSides(userChoice, compChoice);
-
-    userIcon.classList.add("green-background");
-    pcIcon.classList.remove("green-background");
-  } else if (result === "comp") {
-    winText.style.display = "none";
-    tieText.style.display = "none";
-    replayBtn.style.display = "none";
-    nextBtn.style.display = "none";
-
-    lostText.style.display = "block";
-    subText.style.display = "block";
-    playAgainBtn.style.display = "block";
-
-    updateResultSides(userChoice, compChoice);
-
-    userIcon.classList.remove("green-background");
-    pcIcon.classList.add("green-background");
   }
-};
+}
+function initializeScores() {
+  const storedUserScore = localStorage.getItem("userScore");
+  const storedComputerScore = localStorage.getItem("computerScore");
 
-const keyClickHander = (event) => {
-  const target = event.target;
-  const parentDiv = target.closest(".item");
-
-  if (parentDiv) {
-    const keyClicked = parentDiv.id;
-
-    const userChoice = valueOfKey(keyClicked);
-
-    const compChoice = getRandomNumber();
-    console.log("compChoice:", compChoice);
-
-    const result = playRockPaperScissors(userChoice, compChoice);
-
-    updateScores(result);
-
-    updateResultZone(result, userChoice, compChoice);
+  if (storedUserScore) {
+    userScore = parseInt(storedUserScore);
+    const userScoreElement = document.querySelector(".score__number");
+    userScoreElement.innerText = userScore;
   }
-};
 
-const playAgainHandler = (event) => {
-  playingZone.style.display = "flex";
-  resultZone.style.display = "none";
-  mainScreen.style.display = "block";
-  winnerScreen.style.display = "none";
-};
+  if (storedComputerScore) {
+    computerScore = parseInt(storedComputerScore);
+    const computerScoreElement = document.querySelector(
+      ".computer_score__number"
+    );
+    computerScoreElement.innerText = computerScore;
+  }
+}
 
-const nextPageHandler = () => {
-  mainScreen.style.display = "none";
-  winnerScreen.style.display = "flex";
-  nextBtn.style.display = "none";
-};
+initializeScores();
 
-const showRulesHandler = () => {
-  crossBtn.style.display = "flex";
-  rulesDisplay.style.display = "flex";
-};
+function saveScores() {
+  localStorage.setItem("userScore", userScore);
+  localStorage.setItem("computerScore", computerScore);
+}
 
-const removeRulesHandler = () => {
-  crossBtn.style.display = "none";
-  rulesDisplay.style.display = "none";
-};
+function displayWinner(results) {
+  setTimeout(() => {
+    const userWins = isWinner(results);
+    const aiWins = isWinner(results.reverse());
 
-keysArray.forEach((key) => key.addEventListener("click", keyClickHander));
-replayBtn.addEventListener("click", playAgainHandler);
-playAgainBtn.addEventListener("click", playAgainHandler);
-nextBtn.addEventListener("click", nextPageHandler);
-winnerPlayAgainBtn.addEventListener("click", playAgainHandler);
-rulesBtn.addEventListener("click", showRulesHandler);
-crossBtn.addEventListener("click", removeRulesHandler);
+    if (userWins) {
+      resultText.innerText = "you win";
+      resultDivs[0].classList.toggle("winner");
+      keepScore(1);
+    } else if (aiWins) {
+      resultText.innerText = "you lose";
+      resultDivs[1].classList.toggle("winner");
+      keepScore(-1);
+    } else {
+      resultText.innerText = "draw";
+    }
+    resultWinner.classList.toggle("hidden");
+    resultsDiv.classList.toggle("show-winner");
+  }, 1000);
+}
+
+function isWinner(results) {
+  return results[0].beats === results[1].name;
+}
+function keepScore(point) {
+  score += point;
+
+  if (point === 1) {
+    const userScoreElement = document.querySelector(".score__number");
+    userScoreElement.innerText = parseInt(userScoreElement.innerText) + 1;
+    userScore++;
+
+    if (userScore > 0) {
+      const nextBtn = document.querySelector(".next-btn");
+      nextBtn.style.display = "block";
+    }
+  } else if (point === -1) {
+    const computerScoreElement = document.querySelector(
+      ".computer_score__number"
+    );
+    computerScoreElement.innerText =
+      parseInt(computerScoreElement.innerText) + 1;
+    computerScore++;
+  }
+
+  saveScores();
+}
+
+const nextBtn = document.querySelector(".next-btn");
+nextBtn.addEventListener("click", () => {
+  document.querySelector(".container").style.display = "none";
+  document.querySelector(".next-btn").style.display = "none";
+
+  document.querySelector(".win").style.display = "flex";
+});
+
+const winPlayAgainBtn = document.querySelector(".winPlayAgain");
+winPlayAgainBtn.addEventListener("click", () => {
+  document.querySelector(".container").style.display = "block";
+  document.querySelector(".next-btn").style.display = "block";
+
+  document.querySelector(".win").style.display = "none";
+});
+
+playAgainBtn.addEventListener("click", () => {
+  gameDiv.classList.toggle("hidden");
+  resultsDiv.classList.toggle("hidden");
+
+  resultDivs.forEach((resultDiv) => {
+    resultDiv.innerHTML = "";
+    resultDiv.classList.remove("winner");
+  });
+
+  resultText.innerText = "";
+  resultWinner.classList.toggle("hidden");
+  resultsDiv.classList.toggle("show-winner");
+
+  document.querySelector(".win").style.display = "none";
+});
+
+function toggleWinDisplay(show) {
+  const winSection = document.querySelector(".win");
+  winSection.style.display = show ? "flex" : "none";
+}
+
+btnRules.addEventListener("click", () => {
+  modalRules.classList.toggle("show-modal");
+});
+btnClose.addEventListener("click", () => {
+  modalRules.classList.toggle("show-modal");
+});

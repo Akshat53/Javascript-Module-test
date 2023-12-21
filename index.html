@@ -2,143 +2,119 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=\, initial-scale=1.0" />
-    <title>Stone Paper Season | Saibalaji Kokate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
     <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+
+    <title>Frontend Mentor | Rock, Paper, Scissors</title>
   </head>
-  <body>
-    <div class="main-screen">
-      <header>
-        <div class="scoreBoard">
-          <h1>
-            ROCK <br />
-            PAPER <br />
-            SCISSORS
-          </h1>
-          <div class="display-score">
-            <div class="scoreCount">
-              Computer <br />Score
-              <div class="scoreComp">0</div>
-            </div>
-            <div class="scoreCount">
-              Your <br />
-              Score
-              <div class="scorePlayer">0</div>
-            </div>
-          </div>
+  <body class="preload">
+    <div class="container">
+      <header class="header">
+        <img src="./images/logo.svg" alt="logo" class="logo" />
+        <div class="score">
+          <div class="score__title">User score</div>
+          <div class="score__number">0</div>
+        </div>
+        <div class="computer-score">
+          <div class="score__title">Computer Score</div>
+          <div class="computer_score__number">0</div>
         </div>
       </header>
-      <main>
-        <!-- Playing Zone -->
-        <div class="playing-zone">
-          <div class="playing-zone__top">
-            <div class="item" id="rock">
-              <img src="./assets/rock.png" width="50%" height="35%" />
-            </div>
-            <div class="item" id="scissor">
-              <img src="./assets//scissor.png" />
-            </div>
-            <img src="./assets/Line 1.png" id="line1" />
-            <img src="./assets/Line 2.png" id="line2" />
-            <img src="./assets/Line 3.png" id="line3" />
+      <section class="game">
+        <button class="choice-btn" data-choice="paper">
+          <div class="choice paper">
+            <img src="./images/icon-paper.svg" alt="Paper" />
           </div>
-          <div class="playing-zone__bottom item" id="paper">
-            <img src="./assets/paper.png" width="40%" height="40%" />
+        </button>
+        <button class="choice-btn" data-choice="scissors">
+          <div class="choice scissors">
+            <img src="./images/icon-scissors.svg" alt="Scissors" />
           </div>
-        </div>
-
-        <!-- Result Zone -->
-        <div class="result-zone">
-          <div class="side">
-            <div class="side-text">YOU PICKED</div>
-            <div class="user-side-icon">
-              <div class="side-icon" id="user-rock">
-                <img src="./assets/rock.png" width="40%" height="35%" />
-              </div>
-              <div class="side-icon" id="user-scissor">
-                <img src="./assets//scissor.png" />
-              </div>
-              <div class="side-icon" id="user-paper">
-                <img src="./assets/paper.png" width="40%" height="40%" />
-              </div>
-            </div>
+        </button>
+        <button class="choice-btn" data-choice="rock">
+          <div class="choice rock">
+            <img src="./images/icon-rock.svg" alt="Rock" />
           </div>
-          <div class="result">
-            <div class="result-text" id="win-text">YOU WON</div>
-            <div class="result-text" id="lost-text">YOU LOST</div>
-            <div class="result-text" id="tie-text">TIE UP</div>
-            <div class="sub-text">AGAINST PC</div>
-            <button class="playBtn">PLAY AGAIN</button>
-            <button class="replayBtn">REPLAY</button>
-          </div>
-          <div class="side">
-            <div class="side-text">PC PICKED</div>
-            <div class="pc-side-icon">
-              <div class="side-icon" id="pc-rock">
-                <img src="./assets/rock.png" width="40%" height="35%" />
-              </div>
-              <div class="side-icon" id="pc-scissor">
-                <img src="./assets//scissor.png" />
-              </div>
-              <div class="side-icon" id="pc-paper">
-                <img src="./assets/paper.png" width="40%" height="40%" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
+        </button>
+      </section>
     </div>
-
-    <div class="winner-screen">
-      <div class="trophy">
+    <div class="win">
+      <div class="award">
         <img src="./assets/Vector.png" alt="trophy image" />
         <img src="./assets/Group 5.png" alt="stars" class="stars" />
       </div>
-      <div class="hurrayMsg">HURRAY!!</div>
-      <div class="winMsg">YOU WON THE GAME</div>
-      <button class="winnerPlayBtn">PLAY AGAIN</button>
+      <div class="mssge">HURRAY!!</div>
+      <div class="message">YOU WON THE GAME</div>
+      <button class="winPlayAgain">PLAY AGAIN</button>
     </div>
 
-    <!-- Rules -->
-    <div class="cross">
-      <img src="./assets/X.png" alt="cross" width="50%" height="50%" />
-    </div>
-    <div class="rules">
-      <h4>Game Rules</h4>
-      <div class="rules-list">
-        <div>
-          <div class="yellow-pointer">🟨</div>
+    <section class="results hidden">
+      <h2 class="results__heading">you picked</h2>
+      <h2 class="results__heading">the house picked</h2>
+      <div class="results__result"></div>
+      <div class="results__winner hidden">
+        <h3 class="results__text"></h3>
+        <button class="play-again">play again</button>
+      </div>
+      <div class="results__result"></div>
+    </section>
+ 
+    <div class="modal" >
+      <div class="cross">
+        <img src="./assets/X.png" alt="cross" width="50%" height="50%" />
+      </div>
+      <div class="rules">
+        <h4>Game Rules</h4>
+        <div class="rules-list">
           <div>
-            Rock beats scissors, scissors beat paper, and paper beats rock.
+            <div class="yellow-pointer">🟨</div>
+            <div>
+              Rock beats scissors, scissors beat paper, and paper beats rock.
+            </div>
           </div>
-        </div>
-        <div>
-          <div class="yellow-pointer" style="width: 3rem">🟨</div>
           <div>
-            Agree ahead of time whether you’ll count off “rock, paper, scissors,
-            shoot” or just “rock, paper, scissors.”
+            <div class="yellow-pointer" style="width: 3rem">🟨</div>
+            <div>
+              Agree ahead of time whether you’ll count off “rock, paper, scissors,
+              shoot” or just “rock, paper, scissors.”
+            </div>
           </div>
-        </div>
-        <div>
-          <div class="yellow-pointer">🟨</div>
           <div>
-            Use rock, paper, scissors to settle minor decisions or simply play
-            to pass the time
+            <div class="yellow-pointer">🟨</div>
+            <div>
+              Use rock, paper, scissors to settle minor decisions or simply play
+              to pass the time
+            </div>
           </div>
-        </div>
-        <div>
-          <div class="yellow-pointer">🟨</div>
           <div>
-            If both players lay down the same hand, each player lays down
-            another hand
+            <div class="yellow-pointer">🟨</div>
+            <div>
+              If both players lay down the same hand, each player lays down
+              another hand
+            </div>
           </div>
         </div>
       </div>
+        </header>
+     
+      </div>
     </div>
+    
     <footer>
-      <button class="rulesBtn">RULES</button>
-      <button class="nextBtn">NEXT</button>
+      <div class="button-container">
+        <button class="next-btn" tabindex="1">Next</button>
+        <button class="rules-btn" tabindex="1">rules</button>
+      </div>
     </footer>
-    <script src="script.js"></script>
+
+ 
   </body>
 </html>
