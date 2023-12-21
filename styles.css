@@ -307,16 +307,20 @@ body {
 
 .modal {
   position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
+  height: 50%;
+  width: 30%;
+  top:300px;
+  left: 1100px;
   display: grid;
   place-items: center;
   background: var(--shadow-med);
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   pointer-events: none;
+  border: 10px solid white;
+  border-radius: 20px;
+  padding: 30px 10px;
+  background-color: #004429;
 }
 .modal__container {
   background: #fff;
@@ -423,5 +427,8 @@ body {
   width: 12rem;
   margin-top: 1rem;
   cursor: pointer;
+}
+.rules{
+ text-align: left;
 }
 

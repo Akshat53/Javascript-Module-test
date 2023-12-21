@@ -45,16 +45,24 @@ choiceButtons.forEach((button) => {
 });
 
 function choose(choice) {
-  const aichoice = aiChoose();
-  displayResults([choice, aichoice]);
-  displayWinner([choice, aichoice]);
+  const compChoice = computerChoice();
+  displayResults([choice, compChoice]);
+  displayWinner([choice, compChoice]);
 }
 
-function aiChoose() {
+function computerChoice() {
   const rand = Math.floor(Math.random() * CHOICES.length);
   return CHOICES[rand];
 }
 
+const nextBtn = document.querySelector(".next-btn");
+nextBtn.addEventListener("click", () => {
+  document.querySelector(".container").style.display = "none";
+  document.querySelector(".next-btn").style.display = "none";
+  document.querySelector(".results").style.display="none";
+
+  document.querySelector(".win").style.display = "flex";
+});
 function displayResults(results) {
   resultDivs.forEach((resultDiv, idx) => {
     setTimeout(() => {
@@ -106,13 +114,13 @@ function saveScores() {
 function displayWinner(results) {
   setTimeout(() => {
     const userWins = isWinner(results);
-    const aiWins = isWinner(results.reverse());
+    const compWins = isWinner(results.reverse());
 
     if (userWins) {
       resultText.innerText = "you win";
       resultDivs[0].classList.toggle("winner");
       keepScore(1);
-    } else if (aiWins) {
+    } else if (compWins) {
       resultText.innerText = "you lose";
       resultDivs[1].classList.toggle("winner");
       keepScore(-1);
@@ -121,7 +129,7 @@ function displayWinner(results) {
     }
     resultWinner.classList.toggle("hidden");
     resultsDiv.classList.toggle("show-winner");
-  }, 1000);
+  }, 300);
 }
 
 function isWinner(results) {
@@ -151,13 +159,7 @@ function keepScore(point) {
   saveScores();
 }
 
-const nextBtn = document.querySelector(".next-btn");
-nextBtn.addEventListener("click", () => {
-  document.querySelector(".container").style.display = "none";
-  document.querySelector(".next-btn").style.display = "none";
 
-  document.querySelector(".win").style.display = "flex";
-});
 
 const winPlayAgainBtn = document.querySelector(".winPlayAgain");
 winPlayAgainBtn.addEventListener("click", () => {
