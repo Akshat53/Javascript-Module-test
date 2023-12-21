@@ -26,7 +26,6 @@ const rulesDisplay = document.querySelector(".rules");
 const crossBtn = document.querySelector(".cross");
 const keysArray = Array.from(keys);
 
-
 function updateScoreDisplay() {
   const scoresJSON = localStorage.getItem("scores");
   const updatedScores = scoresJSON
@@ -37,10 +36,10 @@ function updateScoreDisplay() {
 }
 updateScoreDisplay();
 
-console.log(keysArray);
+
 
 const valueOfKey = (name) => {
-  console.log(name);
+
   let keyVal = 0;
   if (name === "rock") {
     keyVal = 1;
@@ -53,9 +52,7 @@ const valueOfKey = (name) => {
 };
 
 const getRandomNumber = () => {
-
   const randomDecimal = Math.random();
-
 
   const randomNumber = Math.floor(randomDecimal * 3) + 1;
 
@@ -77,11 +74,9 @@ const playRockPaperScissors = (userChoice, compChoice) => {
 };
 
 const updateScores = (result) => {
-
   const scoresJSON = localStorage.getItem("scores");
   const scores = scoresJSON ? JSON.parse(scoresJSON) : { user: 0, computer: 0 };
 
- 
   if (result === "user") {
     scores.user += 1;
   } else if (result === "comp") {
@@ -94,7 +89,6 @@ const updateScores = (result) => {
 };
 
 const updateResultSides = (userChoice, compChoice) => {
-
   if (userChoice === 1) {
     userRock.style.display = "flex";
     userPaper.style.display = "none";
@@ -125,7 +119,6 @@ const updateResultSides = (userChoice, compChoice) => {
 };
 
 const updateResultZone = (result, userChoice, compChoice) => {
-
   playingZone.style.display = "none";
   resultZone.style.display = "flex";
 
@@ -175,32 +168,25 @@ const updateResultZone = (result, userChoice, compChoice) => {
 
 const keyClickHander = (event) => {
   const target = event.target;
-  const parentDiv = target.closest(".item"); 
+  const parentDiv = target.closest(".item");
 
   if (parentDiv) {
-    const keyClicked = parentDiv.id; 
-    console.log("keyClicked:", keyClicked);
-    const userChoice = valueOfKey(keyClicked);
-    console.log("userChoice:", userChoice);
+    const keyClicked = parentDiv.id;
 
- 
+    const userChoice = valueOfKey(keyClicked);
+
     const compChoice = getRandomNumber();
     console.log("compChoice:", compChoice);
 
-   
     const result = playRockPaperScissors(userChoice, compChoice);
-    console.log("Result: ", result);
 
- 
     updateScores(result);
 
-  
     updateResultZone(result, userChoice, compChoice);
   }
 };
 
 const playAgainHandler = (event) => {
-
   playingZone.style.display = "flex";
   resultZone.style.display = "none";
   mainScreen.style.display = "block";
@@ -208,21 +194,17 @@ const playAgainHandler = (event) => {
 };
 
 const nextPageHandler = () => {
-
   mainScreen.style.display = "none";
   winnerScreen.style.display = "flex";
   nextBtn.style.display = "none";
 };
 
 const showRulesHandler = () => {
-  console.log("inisde showRulesHandler ");
-
   crossBtn.style.display = "flex";
   rulesDisplay.style.display = "flex";
 };
 
 const removeRulesHandler = () => {
-
   crossBtn.style.display = "none";
   rulesDisplay.style.display = "none";
 };
